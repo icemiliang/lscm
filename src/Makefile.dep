@@ -1,0 +1,10 @@
+Boundary.o: Boundary.cpp Boundary.h
+LeastSquare.o: LeastSquare.cpp LeastSquare.h
+Edge.o: Edge.cpp Edge.h HalfEdge.h Vertex.h Face.h
+Face.o: Face.cpp Face.h HalfEdge.h
+FormTrait.o: FormTrait.cpp FormTrait.h
+HalfEdge.o: HalfEdge.cpp HalfEdge.h 
+Homology.o: Homology.cpp Homology.h
+Mesh.o: Mesh.cpp Mesh.h Edge.h Face.h Vertex.h HalfEdge.h
+Vertex.o: Vertex.cpp Vertex.h HalfEdge.h
+Graph.o: Graph.cpp Graph.h

@@ -16,7 +16,7 @@ The program requires Eigen 3 for solving linear systems. Edit config.mk to chang
 
 ## Usage
 ```
-./subdiv input.obj output.obj [output.ply]
+./lscm input.obj output.obj [output.ply]
 ```
 The last argument is an additional output in ply format. MeshLab cannot load vertex normal from obj but can from ply, at least on my computer (Ubuntu 16.04 + MeshLab v1.3.2_64bit). You can ask for a ply output if needed.
 

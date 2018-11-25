@@ -9,17 +9,18 @@ This package includes the prototype codes for implementing least squares conform
 
 In the root directory, run:
 ```
-$ make clean
-$ make
+$ make clean && make
 ```
 
-The program requires Eigen for solving a linear system. Edit config.mk to change its directory.
+The program requires Eigen 3 for solving linear systems. Edit config.mk to change its directory.
 
 ## Usage
 ```
 ./subdiv input.obj output.obj [output.ply]
 ```
-The last argument is an additional output in ply format. MeshLab cannot load vertex normal from obj but can from ply, at least on my computer (Ubuntu 16.04 + MeshLab v1.3.2_64bit).
+The last argument is an additional output in ply format. MeshLab cannot load vertex normal from obj but can from ply, at least on my computer (Ubuntu 16.04 + MeshLab v1.3.2_64bit). You can ask for a ply output if needed.
+
+LSCM requires two fixed vertices. Search in human.obj for "fix" and you will find two such fixed vertices having an additional trait "fix" after xyz coordinates. You can specify your own fixed vertices in the same way.
 
 ## References
 Gu, Xianfeng David. Computational conformal geometry. Edited by Shing-Tung Yau. Somerville, Mass, USA: International Press, 2008.

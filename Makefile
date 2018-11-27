@@ -1,8 +1,8 @@
-# loop-subdivision makefile
+# lscm makefile
 #
-# Author   : Mi, Liang (Arizona State University)
+# Author   : Mi, Liang 
 # Email    : icemiliang@gmail.com
-# Date     : June 13th 2018
+# Date     : Nov 27th 2018
 
 # Tell make that these are phony targets
 .PHONY: all clean

@@ -12,19 +12,18 @@
 
 using namespace MeshLib;
 
-int main(int argc, char * argv[])
-{
-	std::cout << "Reading mesh..." << std::endl;
+int main(int argc, char * argv[]) {
+	std::cout << "--> Reading mesh..." << std::endl;
 	Mesh mesh;
 	mesh.read_obj(argv[1]);
 
 	FormTrait traits(&mesh);
 
-	std::cout << "Computing conformal map..." << std::endl;
+	std::cout << "--> Computing conformal map..." << std::endl;
 	LeastSquare lscm(&mesh);
 	lscm.parameterize();
 
-	std::cout << "Writing mesh..." << std::endl;
+	std::cout << "--> Writing mesh..." << std::endl;
 	mesh.write_obj(argv[2]);
 	if (argc>3)
 		mesh.write_ply(argv[3]);

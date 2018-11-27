@@ -1,18 +1,15 @@
-# loop-subdivision
+# lscm
 #
-# Author   : Mi, Liang (Arizona State University)
+# Author   : Mi, Liang
 # Email    : icemiliang@gmail.com
-# Date     : June 13th 2018
+# Date     : Nov 28th 2018
 
-# Load the configuration file
 include ../config.mk
 
-# List of the source files
 objs = Boundary.o LeastSquare.o Edge.o Face.o FormTrait.o HalfEdge.o\
        Homology.o Mesh.o Vertex.o Graph.o
 src=$(patsubst %.o,%.cpp,$(objs))
 
-# Makefile rules
 all: $(objs) libmesh++.a
 
 depend:
@@ -26,7 +23,6 @@ libmesh++.a: $(objs)
 
 %.o: %.cpp
 	$(CXX) $(CFLAGS) $(E_INC) -c $<
-
 
 clean:
 	rm -f $(objs)

@@ -5,30 +5,23 @@
 
 namespace MeshLib{
 
-
 	class Vertex;
 	class HalfEdge;
 	class Edge;
 	class Face;
 	class Mesh;
 
-
 	//sequencial iterators
 
 	//v->out halfedge
-
-
-	class VertexOutHalfedgeIterator
-	{
+	class VertexOutHalfedgeIterator {
 	public:
-		VertexOutHalfedgeIterator(Mesh *  pMesh, Vertex *  v)
-		{
+		VertexOutHalfedgeIterator(Mesh *  pMesh, Vertex *  v) {
 			m_pMesh = pMesh; m_vertex = v; m_halfedge = m_pMesh->vertexMostClwOutHalfEdge(v);
 		};
 
 		~VertexOutHalfedgeIterator(){};
-		void operator++()
-		{
+		void operator++() {
 			assert(m_halfedge != NULL);
 			if (m_halfedge == m_pMesh->vertexMostCcwOutHalfEdge(m_vertex))
 				m_halfedge = NULL;
@@ -47,17 +40,14 @@ namespace MeshLib{
 	};
 
 	//v->in halfedge
-	class VertexInHalfedgeIterator
-	{
+	class VertexInHalfedgeIterator {
 	public:
-		VertexInHalfedgeIterator(Mesh *  pMesh, Vertex * v)
-		{
+		VertexInHalfedgeIterator(Mesh *  pMesh, Vertex * v) {
 			m_pMesh = pMesh; m_vertex = v; m_halfedge = m_pMesh->vertexMostClwInHalfEdge(v);
 		};
 
 		~VertexInHalfedgeIterator(){};
-		void operator++()
-		{
+		void operator++() {
 			assert(m_halfedge != NULL);
 			if (m_halfedge == m_pMesh->vertexMostCcwInHalfEdge(m_vertex))
 				m_halfedge = NULL;
@@ -75,54 +65,42 @@ namespace MeshLib{
 		HalfEdge * m_halfedge;
 	};
 
-
 	//v -> v
-
-	class VertexVertexIterator
-	{
+	class VertexVertexIterator {
 	public:
 
-		VertexVertexIterator(Vertex *  v)
-		{
+		VertexVertexIterator(Vertex *  v) {
 			m_vertex = v;
 			m_halfedge = m_vertex->most_clw_out_halfedge();
 		};
 
 		~VertexVertexIterator(){};
 
-		void operator++()
-		{
+		void operator++() {
 			assert(m_halfedge != NULL);
 
-			if (!m_vertex->boundary())
-			{
-				if (m_halfedge != m_vertex->most_ccw_out_halfedge())
-				{
+			if (!m_vertex->boundary()) {
+				if (m_halfedge != m_vertex->most_ccw_out_halfedge()) {
 					m_halfedge = m_halfedge->ccw_rotate_about_source();
 				}
-				else
-				{
+				else {
 					m_halfedge = NULL;
 				}
 				return;
 			}
 
-			if (m_vertex->boundary())
-			{
-				if (m_halfedge == m_vertex->most_ccw_in_halfedge())
-				{
+			if (m_vertex->boundary()) {
+				if (m_halfedge == m_vertex->most_ccw_in_halfedge()) {
 					m_halfedge = NULL;
 					return;
 				}
 
 				HalfEdge * he = m_halfedge->ccw_rotate_about_source();
 
-				if (he == NULL)
-				{
+				if (he == NULL) {
 					m_halfedge = m_vertex->most_ccw_in_halfedge();
 				}
-				else
-				{
+				else {
 					m_halfedge = he;
 				}
 			}
@@ -131,20 +109,16 @@ namespace MeshLib{
 		};
 
 
-		Vertex * value()
-		{
-			if (!m_vertex->boundary())
-			{
+		Vertex * value() {
+			if (!m_vertex->boundary()) {
 				return m_halfedge->target();
 			}
 
-			if (m_halfedge != m_vertex->most_ccw_in_halfedge())
-			{
+			if (m_halfedge != m_vertex->most_ccw_in_halfedge()) {
 				return m_halfedge->target();
 			}
 
-			if (m_halfedge == m_vertex->most_ccw_in_halfedge())
-			{
+			if (m_halfedge == m_vertex->most_ccw_in_halfedge()) {
 				return m_halfedge->source();
 			}
 			return NULL;
@@ -161,54 +135,42 @@ namespace MeshLib{
 		HalfEdge * m_halfedge;
 	};
 
-
 	//v -> edge
-
-	class VertexEdgeIterator
-	{
+	class VertexEdgeIterator {
 	public:
 
-		VertexEdgeIterator(Vertex *  v)
-		{
+		VertexEdgeIterator(Vertex *  v) {
 			m_vertex = v;
 			m_halfedge = m_vertex->most_clw_out_halfedge();
 		};
 
 		~VertexEdgeIterator(){};
 
-		void operator++()
-		{
+		void operator++() {
 			assert(m_halfedge != NULL);
 
-			if (!m_vertex->boundary())
-			{
-				if (m_halfedge != m_vertex->most_ccw_out_halfedge())
-				{
+			if (!m_vertex->boundary()) {
+				if (m_halfedge != m_vertex->most_ccw_out_halfedge()) {
 					m_halfedge = m_halfedge->ccw_rotate_about_source();
 				}
-				else
-				{
+				else {
 					m_halfedge = NULL;
 				}
 				return;
 			}
 
-			if (m_vertex->boundary())
-			{
-				if (m_halfedge == m_vertex->most_ccw_in_halfedge())
-				{
+			if (m_vertex->boundary()) {
+				if (m_halfedge == m_vertex->most_ccw_in_halfedge()) {
 					m_halfedge = NULL;
 					return;
 				}
 
 				HalfEdge * he = m_halfedge->ccw_rotate_about_source();
 
-				if (he == NULL)
-				{
+				if (he == NULL) {
 					m_halfedge = m_vertex->most_ccw_in_halfedge();
 				}
-				else
-				{
+				else {
 					m_halfedge = he;
 				}
 			}
@@ -216,17 +178,13 @@ namespace MeshLib{
 			return;
 		};
 
-
-		Edge * value()
-		{
+		Edge * value() {
 			assert(m_halfedge != NULL);
 			return m_halfedge->edge();
 		};
 
 		Edge * operator*() { return value(); };
-
 		bool end(){ return m_halfedge == NULL; };
-
 		void reset()	{ m_halfedge = m_vertex->most_clw_out_halfedge(); };
 
 	private:
@@ -234,26 +192,20 @@ namespace MeshLib{
 		HalfEdge * m_halfedge;
 	};
 
-
-
 	// v->face
-	class VertexFaceIterator
-	{
+	class VertexFaceIterator {
 	public:
-		VertexFaceIterator(Vertex * & v)
-		{
+		VertexFaceIterator(Vertex * & v) {
 			m_vertex = v;
 			m_halfedge = m_vertex->most_clw_out_halfedge();
 		};
 
 		~VertexFaceIterator(){};
 
-		void operator++()
-		{
+		void operator++() {
 			assert(m_halfedge != NULL);
 
-			if (m_halfedge == m_vertex->most_ccw_out_halfedge())
-			{
+			if (m_halfedge == m_vertex->most_ccw_out_halfedge()) {
 				m_halfedge = NULL;
 				return;
 			}
@@ -271,20 +223,17 @@ namespace MeshLib{
 	};
 
 	// f -> halfedge
-	class FaceHalfedgeIterator
-	{
+	class FaceHalfedgeIterator {
 	public:
 
-		FaceHalfedgeIterator(Face * f)
-		{
+		FaceHalfedgeIterator(Face * f) {
 			m_face = f;
 			m_halfedge = f->halfedge();
 		};
 
 		~FaceHalfedgeIterator(){};
 
-		void operator++()
-		{
+		void operator++() {
 			assert(m_halfedge != NULL);
 			m_halfedge = m_halfedge->he_next();
 
@@ -305,27 +254,22 @@ namespace MeshLib{
 		HalfEdge * m_halfedge;
 	};
 
-
 	// f -> edge
-	class FaceEdgeIterator
-	{
+	class FaceEdgeIterator {
 	public:
 
-		FaceEdgeIterator(Face * f)
-		{
+		FaceEdgeIterator(Face * f) {
 			m_face = f;
 			m_halfedge = f->halfedge();
 		};
 
 		~FaceEdgeIterator(){};
 
-		void operator++()
-		{
+		void operator++() {
 			assert(m_halfedge != NULL);
 			m_halfedge = m_halfedge->he_next();
 
-			if (m_halfedge == m_face->halfedge())
-			{
+			if (m_halfedge == m_face->halfedge()) {
 				m_halfedge = NULL;
 				return;
 			};
@@ -341,27 +285,22 @@ namespace MeshLib{
 		HalfEdge * m_halfedge;
 	};
 
-
 	// f -> vertex
-	class FaceVertexIterator
-	{
+	class FaceVertexIterator {
 	public:
 
-		FaceVertexIterator(Face * f)
-		{
+		FaceVertexIterator(Face * f) {
 			m_face = f;
 			m_halfedge = f->halfedge();
 		};
 
 		~FaceVertexIterator(){};
 
-		void operator++()
-		{
+		void operator++() {
 			assert(m_halfedge != NULL);
 			m_halfedge = m_halfedge->he_next();
 
-			if (m_halfedge == m_face->halfedge())
-			{
+			if (m_halfedge == m_face->halfedge()) {
 				m_halfedge = NULL;
 				return;
 			};
@@ -377,13 +316,10 @@ namespace MeshLib{
 		HalfEdge * m_halfedge;
 	};
 
-
 	// soild vertices
-	class MeshVertexIterator
-	{
+	class MeshVertexIterator {
 	public:
-		MeshVertexIterator(Mesh * pMesh)
-		{
+		MeshVertexIterator(Mesh * pMesh) {
 			m_pMesh = pMesh;
 			m_iter = m_pMesh->vertices().begin();
 		}
@@ -403,11 +339,9 @@ namespace MeshLib{
 	};
 
 	// soild faces
-	class MeshFaceIterator
-	{
+	class MeshFaceIterator {
 	public:
-		MeshFaceIterator(Mesh * pMesh)
-		{
+		MeshFaceIterator(Mesh * pMesh) {
 			m_pMesh = pMesh;
 			m_iter = pMesh->faces().begin();
 		}
@@ -427,11 +361,9 @@ namespace MeshLib{
 	};
 
 	// soild edges
-	class MeshEdgeIterator
-	{
+	class MeshEdgeIterator {
 	public:
-		MeshEdgeIterator(Mesh * pMesh)
-		{
+		MeshEdgeIterator(Mesh * pMesh) {
 			m_pMesh = pMesh;
 			m_iter = m_pMesh->edges().begin();
 		}
@@ -451,11 +383,9 @@ namespace MeshLib{
 	};
 
 	// soild halfedges
-	class MeshHalfEdgeIterator
-	{
+	class MeshHalfEdgeIterator {
 	public:
-		MeshHalfEdgeIterator(Mesh * pMesh)
-		{
+		MeshHalfEdgeIterator(Mesh * pMesh) {
 			m_pMesh = pMesh;
 			m_iter = m_pMesh->edges().begin();
 			m_id = 0;
@@ -463,17 +393,13 @@ namespace MeshLib{
 
 		HalfEdge * value() { Edge * e = *m_iter; return e->halfedge(m_id); };
 
-		void operator++()
-		{
+		void operator++() {
 			++m_id;
 
-			switch (m_id)
-			{
-			case 1:
-			{
+			switch (m_id) {
+			case 1: {
 				Edge * e = *m_iter;
-				if (e->halfedge(m_id) == NULL)
-				{
+				if (e->halfedge(m_id) == NULL) {
 					m_id = 0;
 					++m_iter;
 				}
@@ -487,17 +413,14 @@ namespace MeshLib{
 		};
 
 		bool end() { return m_iter == m_pMesh->edges().end(); }
-
 		HalfEdge * operator*(){ return value(); };
 
 	private:
-		HalfEdge * m_he;
+		// HalfEdge * m_he;
 		Mesh *	 m_pMesh;
 		std::list<Edge*>::iterator m_iter;
 		int  m_id;
 	};
-
-
 } //solid 
 
 #endif

@@ -7,6 +7,8 @@ This package includes the prototype codes for implementing least squares conform
 
 ## Build
 
+[![Build status](https://ci.appveyor.com/api/projects/status/mxjqk9rqgiaec40d?svg=true)](https://ci.appveyor.com/project/icemiliang/lscm)
+
 In the root directory, run:
 ```
 $ make clean && make

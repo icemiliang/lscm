@@ -1,11 +1,8 @@
-
 #include "Trait.h"
 
 using namespace MeshLib;
 
-
-void Trait::clear( Trait * & pT )
-{
+void Trait::clear( Trait * & pT ) {
 	if( pT == NULL ) return;
 
 	clear( pT->next() );
@@ -15,42 +12,35 @@ void Trait::clear( Trait * & pT )
 
 /*! Modification on July 26, 2006.  To discriminate the partial string case.
 e.g. sfather=( and r=( */
-void Trait::updateTraitString(std::string &traitString, std::string &traitName, std::string &traitValue)
-{
+void Trait::updateTraitString(std::string &traitString, std::string &traitName, std::string &traitValue) {
 	int sp, ep, sfp;
 	sfp = (int)traitString.find(" "+traitName+"=(");
 	sp = (int)traitString.find(traitName+"=(");
-	if(sp==0 || sfp != (int)std::string::npos)
-	{
+	if(sp == 0 || sfp != (int)std::string::npos) {
 		int temp;
 		if( sp == 0 ) temp = sp;
 		else temp = sfp;
 		
 		sp = (int)traitString.find_first_of("(", temp);
 		ep = (int)traitString.find_first_of(")", temp);
-		if(sp != (int)std::string::npos && ep != (int)std::string::npos)
-		{
+		if(sp != (int)std::string::npos && ep != (int)std::string::npos) {
 			// get inside of the parenthesis
 			sp++;
 			ep--;
 			traitString.replace(sp, ep-sp+1, traitValue);
 		}
-		else
-		{
+		else {
 			// string is corrupt
 			std::cerr << "ERROR: Trait string missing parenthesis: " << traitString << std::endl;
 			return;
 		}
 	}
-	else
-	{
+	else {
 		// trait not present in string
-		if(traitString.length())
-		{
+		if(traitString.length()) {
 			traitString = traitName + "=(" + traitValue + ") " + traitString;
 		}
-		else
-		{
+		else {
 			traitString = traitName + "=(" + traitValue + ")";
 		}
 
@@ -59,13 +49,11 @@ void Trait::updateTraitString(std::string &traitString, std::string &traitName, 
 }
 
 // see header for comments
-std::string Trait::getTraitValue(std::string &traitString, std::string &traitName)
-{
+std::string Trait::getTraitValue(std::string &traitString, std::string &traitName) {
 	int sp, ep, sfp;
 	sfp = (int)traitString.find(" "+traitName+"=(");
 	sp = (int)traitString.find(traitName+"=(");
-	if(sp == 0 || sfp != (int)std::string::npos)
-	{
+	if(sp == 0 || sfp != (int)std::string::npos) {
 		int temp;
 		if( sp == 0 ) temp = sp;
 		else temp = sfp;
@@ -73,14 +61,12 @@ std::string Trait::getTraitValue(std::string &traitString, std::string &traitNam
 		std::string isolatedTraitString(traitString.substr(temp));
 		sp = (int)isolatedTraitString.find_first_of("(");
 		ep = (int)isolatedTraitString.find_first_of(")");
-		if(sp != (int)std::string::npos)
-		{
+		if(sp != (int)std::string::npos) {
 			// the value was found
 			sp++;
 			return isolatedTraitString.substr(sp, ep-sp);
 		}
-		else
-		{
+		else {
 			std::cerr << "ERROR: String missing parenthesis: " << isolatedTraitString << std::endl;
 			return std::string();
 		}
@@ -90,8 +76,7 @@ std::string Trait::getTraitValue(std::string &traitString, std::string &traitNam
 }
 
 // A frequently used routine: convert uv to 3D position
-Point Trait::getUV(std::string s)
-{
+Point Trait::getUV(std::string s) {
 	std::string::size_type pos = s.find ("uv=");
 	std::string subs = s.substr (pos);
 	double px, py;
@@ -100,8 +85,7 @@ Point Trait::getUV(std::string s)
 	return Point(px,py,0);
 }
 
-void Trait::updateUV(std::string &traitString, Point p)
-{
+void Trait::updateUV(std::string &traitString, Point p) {
 	std::string attname("uv");
 	char str[256];
 	sprintf(str, "%g %g", p[0], p[1]);
@@ -110,8 +94,7 @@ void Trait::updateUV(std::string &traitString, Point p)
 }
 
 // A frequently used routine: convert conformal to 3D position
-Point Trait::getConformal(std::string s)
-{
+Point Trait::getConformal(std::string s) {
 	std::string::size_type pos = s.find ("conformal");
 	std::string subs = s.substr (pos);
 	double px, py, pz;

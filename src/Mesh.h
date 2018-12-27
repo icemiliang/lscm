@@ -13,17 +13,14 @@
 #include <list>
 #include <map>
 
-namespace MeshLib
-{
+namespace MeshLib {
 	class Vertex;
 	class HalfEdge;
 	class Edge;
 	class Face;
 
-	class Mesh
-	{
+	class Mesh {
 	public:
-
 		typedef Vertex   * pVertex;
 		typedef HalfEdge * pHalfEdge;
 		typedef Edge     * pEdge;
@@ -90,7 +87,6 @@ namespace MeshLib
 		std::list<Edge*> &edges() { return m_edges; };
 		std::list<Face*> &faces() { return m_faces; };
 		std::list<Vertex*> &vertices() { return m_vertices; };
-
 
 	protected:
 		std::list<Edge*> m_edges;

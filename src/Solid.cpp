@@ -23,16 +23,13 @@ using namespace MeshLib;
 /*!
   This class define solid(mesh) structure.
 */
-Solid::tFace Solid::createFace( int * v , int id )
-{
+Solid::tFace Solid::createFace( int * v , int id ) {
 	tFace f = createFace( id );		
 	//create halfedges
 	tHalfEdge hes[3];
 
-
 	int i;
-	for( i = 0; i < 3; i ++ )
-	{
+	for( i = 0; i < 3; i ++ ) {
 		hes[i] = new HalfEdge;
 
 		Vertex * vert =  idVertex( v[i] );
@@ -134,8 +131,7 @@ void Solid::destroyHalfEdge(HalfEdge * he)
 }
 
 //this will happen only after all the halfedge on the face is deleted
-void Solid::destroyFace (Face * face)
-{
+void Solid::destroyFace (Face * face) {
 	assert(face->trait () == NULL);
 	HalfEdge * he = face->halfedge ();
 	for(int i=0; i<3; i++){
@@ -150,8 +146,7 @@ void Solid::destroyFace (Face * face)
 }
 
 
-void Solid::collapseEdge (Edge * edge)
-{
+void Solid::collapseEdge (Edge * edge) {
 	collapseEdgeVertex(edge,edge->halfedge (0)->source () );
 }
 
@@ -1229,24 +1224,21 @@ Vertex * Solid::edgeSplit( Edge * e )
 	}	
 
 
-	for( ListIterator<Face> iter( new_faces ); !iter.end(); ++ iter )
-	{
+	for( ListIterator<Face> iter( new_faces ); !iter.end(); ++ iter ) {
 		Face * f = *iter;
 		HalfEdge * he = f->halfedge();
 
-		do{
-			Edge     * e = he->edge();
-			if( e->halfedge(1) != NULL )
-			{
+		do {
+			Edge* e = he->edge();
+			if( e->halfedge(1) != NULL ) {
 				HalfEdge * h = e->halfedge(0);
-				if( h->target()->id() < h->source()->id() )
-				{
+				if( h->target()->id() < h->source()->id() ) {
 					e->halfedge(0) = e->halfedge(1);
 					e->halfedge(1) = h;
 				}
 			}
 			he = he->he_next();
-		}while( he != f->halfedge() );
+		} while( he != f->halfedge() );
 	}
 
 	delete e;
@@ -1254,68 +1246,57 @@ Vertex * Solid::edgeSplit( Edge * e )
 }
 
 
-void Solid::write( const char * output )
-{
+void Solid::write( const char * output ) {
 	FILE * _os = fopen( output,"w");
 	if(  ! _os ) throw FException();
 
 	//remove vertices
 	AVL::TreeIterator<Vertex> viter( m_verts );
-	for( ; !viter.end() ; ++ viter )
-	{
+	for( ; !viter.end() ; ++ viter ) {
 		tVertex v = *viter;
 
 		fprintf(_os,"Vertex %d ", v->id() );
 		
-		for( int i = 0; i < 3; i ++ )
-		{
+		for( int i = 0; i < 3; i ++ ) {
 			fprintf(_os,"%g ",v->point()[i]);
 		}
-		if( v->string().size() > 0 )
-		{
+		if( v->string().size() > 0 ) {
 			fprintf(_os,"{%s}", v->string().c_str() );
 		}
 		fprintf(_os,"\n");
 
 	}
 
-	for( AVL::TreeIterator<Face> fiter(m_faces); !fiter.end(); ++ fiter )
-	{
+	for( AVL::TreeIterator<Face> fiter(m_faces); !fiter.end(); ++ fiter ) {
 		tFace f = *fiter;
 		fprintf(_os,"Face %d",f->id());
 
 		tHalfEdge he = f->halfedge();
-		do{
+		do {
 			fprintf(_os," %d", he->target()->id() );
 			he = he->he_next();
-		}while( he != f->halfedge() );
+		} while( he != f->halfedge() );
 
-		if( f->string().size() > 0 )
-		{
+		if( f->string().size() > 0 ) {
 			fprintf(_os,"{%s}", f->string().c_str() );
 		}
 
 		fprintf(_os,"\n");
 	}
 
-	for( AVL::TreeIterator<Edge> eiter(m_edges); !eiter.end(); ++ eiter )
-	{
+	for( AVL::TreeIterator<Edge> eiter(m_edges); !eiter.end(); ++ eiter ) {
 		tEdge e = *eiter;
-		if( e->string().size() > 0 )
-		{
+		if( e->string().size() > 0 ) {
 			fprintf(_os,"Edge %d %d {%s} \n", edgeVertex1(e)->id(), edgeVertex2(e)->id(), e->string().c_str() );
 		}
-
 	}
 
-	for( AVL::TreeIterator<Face> pfiter(m_faces); !pfiter.end(); ++ pfiter )
-	{
+	for( AVL::TreeIterator<Face> pfiter(m_faces); !pfiter.end(); ++ pfiter ) {
 		tFace f = *pfiter;
 
 		tHalfEdge he = f->halfedge();
-		do{
-			if( he->string().size() > 0 )
-			{
+		do {
+			if( he->string().size() > 0 ) {
 				fprintf(_os,"Corner %d %d {%s}\n", he->vertex()->id(), f->id(), he->string().c_str() );
 			}
 			he = he->he_next();
@@ -1337,10 +1318,8 @@ double Solid::edgeLength( Solid::tEdge e )
 
 
 void
-Solid:: labelBoundaryEdges()
-{
-	for( AVL::TreeIterator<Edge> eiter( m_edges ); ! eiter.end() ; ++ eiter )
-	{
+Solid:: labelBoundaryEdges() {
+	for( AVL::TreeIterator<Edge> eiter( m_edges ); ! eiter.end() ; ++ eiter ) {
 		Edge  *   edge = *eiter;
 		HalfEdge* he[2];
 
@@ -1348,30 +1327,25 @@ Solid:: labelBoundaryEdges()
 		he[1] = edge->halfedge(1);
 		
 		//label boundary
-		if( he[1] == NULL )
-		{
+		if( he[1] == NULL ) {
 			he[0]->vertex()->boundary() = true;
 			he[0]->he_prev()->vertex()->boundary()  = true;
 		}
-
 	}
 }
 
 
 void 
-Solid::removeDanglingVertices()
-{
+Solid::removeDanglingVertices() {
 	List<Vertex> dangling_verts;
 	//Label boundary edges
-	for( AVL::TreeIterator<Vertex> viter( m_verts ); ! viter.end() ; ++ viter )
-	{
+	for( AVL::TreeIterator<Vertex> viter( m_verts ); ! viter.end() ; ++ viter ) {
 		Solid::tVertex     v = *viter;
 		if( v->halfedge() != NULL ) continue;
 		dangling_verts.Append( v );
 	}
 
-	for( ListIterator<Vertex> iter( dangling_verts ); !iter.end(); ++ iter )
-	{
+	for( ListIterator<Vertex> iter( dangling_verts ); !iter.end(); ++ iter ) {
 		Solid::tVertex v = *iter;
 		m_verts.remove( v );
 		delete v;
@@ -1379,8 +1353,7 @@ Solid::removeDanglingVertices()
 	}
 }
 
-void Solid::readBYU( std::istream & is )
-{
+void Solid::readBYU( std::istream & is ) {
 	char line[MAX_LINE];
 
 	is.getline(line, MAX_LINE);
@@ -1394,8 +1367,7 @@ void Solid::readBYU( std::istream & is )
 	int vind, find;
 	vind = find = 1;
 
-	while( is && !is.eof() && is.getline(line, MAX_LINE) )
-	{		
+	while( is && !is.eof() && is.getline(line, MAX_LINE) ) {		
 		if( strlen( line ) == 0 ) continue;
 
 		std::string s(line);
@@ -1403,11 +1375,9 @@ void Solid::readBYU( std::istream & is )
 		string_token_iterator iter(s, " \n"); 
 		std::string str;
 
-		if( vind <= vnum )
-		{
+		if( vind <= vnum ) {
 			Point p;
-			for( int i=0; i<3; i++ )
-			{
+			for( int i=0; i<3; i++ ) {
 				str = *iter;
 				p[i] = atof( str.c_str() );
 				iter++;
@@ -1418,11 +1388,9 @@ void Solid::readBYU( std::istream & is )
 			v->id() = vind;
 			vind ++;
 		}
-		else
-		{
+		else {
 			int v[3];
-			for( int i = 0; i < 3; i ++ )
-			{
+			for( int i = 0; i < 3; i ++ ) {
 				str = *iter;
 				v[i] = atoi( str.c_str() );
 				iter++;
@@ -1439,37 +1407,30 @@ void Solid::readBYU( std::istream & is )
 	removeDanglingVertices();
 }
 
-void Solid::writeBYU( std::ostream & os )
-{
+void Solid::writeBYU( std::ostream & os ) {
 	// first two line
 	os << "1 " << numVertices() << " " << numFaces() << " " << numVertices() + numFaces() - 1 << std::endl;
 	os << "1 " << numFaces() << std::endl;
 
 	AVL::TreeIterator<Vertex> viter( m_verts );
-	for( ; !viter.end() ; ++ viter )
-	{
+	for( ; !viter.end() ; ++ viter ) {
 		tVertex v = *viter;
 	
-		for( int i = 0; i < 3; i ++ )
-		{
+		for( int i = 0; i < 3; i ++ ) {
 			os << "    " << std::fixed << v->point()[i];  
 		}
 
 		os << std::endl;
 	}
 
-	for( AVL::TreeIterator<Face> fiter(m_faces); !fiter.end(); ++ fiter )
-	{
+	for( AVL::TreeIterator<Face> fiter(m_faces); !fiter.end(); ++ fiter ) {
 		tFace f = *fiter;
 		tHalfEdge he = f->halfedge();
-		for( int i=0; i<3; i ++ )
-		{
-			if( i!= 2 )
-			{
+		for( int i=0; i<3; i ++ ) {
+			if( i!= 2 ) {
 				os << "    ";
 			}
-			else
-			{
+			else {
 				os << "    -"; 
 			}
 			os << std::right << he->target()->id();
@@ -1481,20 +1442,15 @@ void Solid::writeBYU( std::ostream & os )
 }
 
 //Based very strongly on code found in CT.
-void Solid::UpdateNormals(void)
-{
+void Solid::UpdateNormals(void) {
 	_FaceNormal(this);
 	_VertexNormal(this);
 }
 
-
-void Solid::_FaceNormal(MeshLib::Solid *pMesh)
-{
-	for( MeshLib::SolidFaceIterator fiter( pMesh ); !fiter.end(); ++ fiter )
-	{
+void Solid::_FaceNormal(MeshLib::Solid *pMesh) {
+	for( MeshLib::SolidFaceIterator fiter( pMesh ); !fiter.end(); ++ fiter ) {
 		MeshLib::Face * f = *fiter;
-		if( f->trait() == NULL )
-		{
+		if( f->trait() == NULL ) {
 			MeshLib::FaceNormalTrait * ft = new MeshLib::FaceNormalTrait;
 			if( ft == NULL ) return;
 			MeshLib::add_trait<MeshLib::FaceNormalTrait,MeshLib::Face>(f,ft);
@@ -1503,8 +1459,7 @@ void Solid::_FaceNormal(MeshLib::Solid *pMesh)
 		MeshLib::Point p[3];
 		int i = 0;
 
-		for( MeshLib::FaceVertexIterator fviter(f); !fviter.end(); ++ fviter )
-		{
+		for( MeshLib::FaceVertexIterator fviter(f); !fviter.end(); ++ fviter ) {
 			MeshLib::Vertex * v = *fviter;
 			p[i++] = v->point();
 		}
@@ -1515,39 +1470,7 @@ void Solid::_FaceNormal(MeshLib::Solid *pMesh)
 	}
 }
 
-void Solid::_VertexNormal(MeshLib::Solid *pMesh)
-{
-#if 0
-	for( MeshLib::SolidVertexIterator viter( pMesh ); !viter.end(); ++ viter )
-	{
-		MeshLib::Vertex * v = *viter;
-
-		MeshLib::Point n(0,0,0);
-		int count = 0;
-
-		for(MeshLib::VertexFaceIterator vfiter(v); !vfiter.end(); ++ vfiter )
-		{
-			MeshLib::Face * f = *vfiter;
-			n += f_normal(f);
-			count ++;
-		}
-		n /= count;
-
-		if( n.norm() > 1e-5 )
-		{
-			n /= n.norm();
-		}
-
-		v->normal() = n;
-	}
-
-	for( MeshLib::SolidFaceIterator fiter( pMesh ); !fiter.end(); ++ fiter )
-	{
-		MeshLib::Face * f = *fiter;
-		MeshLib::FaceNormalTrait * pfnt = pTrait<MeshLib::FaceNormalTrait,MeshLib::Face>( f );
-		del_trait<MeshLib::FaceNormalTrait,MeshLib::Face>(f, pfnt);
-	}
-#else
+void Solid::_VertexNormal(MeshLib::Solid *pMesh) {
     // using edge lengthes as weight on calculating vertex normal
     for (SolidFaceIterator fIter(this); !fIter.end(); ++fIter)
     {
@@ -1569,8 +1492,4 @@ void Solid::_VertexNormal(MeshLib::Solid *pMesh)
         Vertex *pVer = *vIter;
         pVer->normal() /= pVer->normal().norm();
     }
-#endif
 }
-
-
-

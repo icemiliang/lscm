@@ -9,12 +9,10 @@
 #include "Trait.h"
 #include "HalfEdge.h"
 
-namespace MeshLib
-{
+namespace MeshLib {
 	class HalfEdge;
 
-	class Vertex
-	{
+	class Vertex {
 	public:
 		Vertex() { m_halfedge = NULL; m_boundary = false; m_trait = NULL; };
 		~Vertex(){};
@@ -31,11 +29,8 @@ namespace MeshLib
 		Trait *&trait(){ return m_trait; };
 
 		HalfEdge *most_ccw_in_halfedge();
-
 		HalfEdge *most_clw_in_halfedge() ;
-
 		HalfEdge *most_ccw_out_halfedge();
-
 		HalfEdge *most_clw_out_halfedge();
 
 	private:
@@ -50,6 +45,6 @@ namespace MeshLib
 		Trait *m_trait;
 		std::string m_string;
 	};
-
 }
+
 #endif

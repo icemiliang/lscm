@@ -4,28 +4,21 @@
 #include <string>
 #include "SList.h"
 
-namespace MeshLib
-{
-
-class Token
-{
+namespace MeshLib {
+class Token {
 public:
 	std::string m_key;
 	std::string m_value;
 };
 
-
-class Parser
-{
+class Parser {
 public:
-
 	Parser( std::string & str);
 	~Parser();
 
 	List<Token> & tokens() { return m_tokens; };
 
 private:
-
 	char next_char();
 	void skip_blank();
 	bool end();
@@ -38,8 +31,6 @@ private:
 
 	char * m_pt;
 };
+}
 
-
-} //namespace 
 #endif
-

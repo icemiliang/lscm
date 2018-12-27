@@ -10,11 +10,8 @@
 #include "FormTrait.h"
 #include "Graph.h"
 
-
-namespace MeshLib
-{
-	class Homology
-	{
+namespace MeshLib {
+	class Homology {
 	public:
 		Homology(Mesh * mesh);
 		~Homology();
@@ -28,4 +25,5 @@ namespace MeshLib
 		std::list<std::list<HalfEdge*>*> m_loops;
 	};
 }
+
 #endif

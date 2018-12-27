@@ -13,7 +13,6 @@
 #include "Avltree.h"
 #include "SList.h"
 
-
 namespace MeshLib{
 
 class Vertex;
@@ -30,11 +29,8 @@ class Configure;
 /*!
   This class define solid(mesh) structure.
 */
-class Solid 
-{
-
+class Solid  {
 public:
-
 	// has to be gong someday!
 
 	// pointer to Vertices, Halfedges, Edges, Face and Solid
@@ -365,7 +361,6 @@ public:
 	void readBYU(  std::istream & is );
 	void writeBYU( std::ostream & os );
 
-
 protected:
 
 	//std::map<EdgeKey, tEdge, ltedgekey >              m_edges;
@@ -450,7 +445,6 @@ protected:
 
 };
 
+}
 
-}//name space MeshLib
-
-#endif //_MESHLIB_SOLID_H_ defined
+#endif

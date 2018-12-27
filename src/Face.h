@@ -6,16 +6,14 @@
 #include "Trait.h"
 #include "HalfEdge.h"
 
-namespace MeshLib
-{
+namespace MeshLib {
 	class Edge;
 	class Vertex;
 	class Trait;
 	class HalfEdge;
 	class Point;
 
-	class Face
-	{
+	class Face {
 	public:
 		Face() { m_id = 0; m_halfedge = NULL; m_trait = NULL; m_string = ""; };
 		~Face() {};

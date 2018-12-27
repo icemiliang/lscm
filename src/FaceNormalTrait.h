@@ -3,31 +3,22 @@
 
 #include "Trait.h"
 
-namespace MeshLib
-{
+namespace MeshLib {
 #define f_normal(f) trait<FaceNormalTrait,Face>(f).normal()
 
-class FaceNormalTrait : public Trait
-{
+class FaceNormalTrait : public Trait {
 public:
-	//!  Constructor.
 	FaceNormalTrait(){ };
-	//!  Destructor.
 	~FaceNormalTrait(){ };
-	//!  Read method.
 	void read(){};
-	//!  Write method.
 	void write(){};
 
-	//!  Get normal.
 	Point & normal(){ return m_normal;};
 
-public:
-	//!  SceneFaceTrait normal.
+private:
 	Point m_normal;
-
 };
 
-} //namespace MeshLib
+}
 
-#endif //FACE_NORMAL_TRAIT_H
+#endif

@@ -2,7 +2,6 @@
 #include <iostream>
 #include <fstream>
 
-
 using namespace MeshLib;
 
 Graph::Graph(Mesh *mesh) {
@@ -125,16 +124,14 @@ void Graph::locate_loops() {
 
 		// From end of path1 to start of path1
 		for (int i = path1.size() - 1; i > 0; i--) {
-			Vertex *s = path1[i];
-			Vertex *t = path1[i - 1];
+			Vertex* s = path1[i];
+			Vertex* t = path1[i - 1];
 
-			Edge *e = m_mesh->vertex_edge(s, t);
+			Edge* e = m_mesh->vertex_edge(s, t);
 			// he from s to t
 
 			HalfEdge *he = (e->halfedge(0)->target() == t) ? e->halfedge(0) : e->halfedge(1);
-
 			assert(he->target() == t && he->source() == s);
-			
 			loop->push_back(he);
 		}
 
@@ -163,19 +160,17 @@ void Graph::locate_loops() {
 		}
 		myfile.close();
 	}
-
-
 }
 
 // Propagate through all the faces
 void Graph::propagation() {
 	for (MeshEdgeIterator me(m_mesh); !me.end(); me++) {
-		Edge *e = *me;
+		Edge* e = *me;
 		e_sharp(e) = false;
 	}
 	Face *head = NULL;
 	for (MeshFaceIterator mf(m_mesh); !mf.end(); mf++) {
-		Face *f = *mf;
+		Face* f = *mf;
 		f_touched(f) = false;
 		head = f;
 	}
@@ -186,7 +181,7 @@ void Graph::propagation() {
 	q.push(head);
 
 	while (!q.empty()) {
-		Face *head = q.front();
+		Face* head = q.front();
 		q.pop();
 
 		HalfEdge *he = head->halfedge();
@@ -204,8 +199,7 @@ void Graph::propagation() {
 		}
 	}
 
-	for (MeshEdgeIterator eiter(m_mesh); !eiter.end(); eiter++)
-	{
+	for (MeshEdgeIterator eiter(m_mesh); !eiter.end(); eiter++) {
 		Edge * e = *eiter;
 		e_sharp(e) = !e_sharp(e);
 	}
@@ -219,20 +213,17 @@ void Graph::propagation() {
 	}
 }
 
-void Graph::prune()
-{
+void Graph::prune() {
 	std::set<Vertex*> nodes;
 
-	for (MeshVertexIterator viter(m_mesh); !viter.end(); viter++)
-	{
+	for (MeshVertexIterator viter(m_mesh); !viter.end(); viter++) {
 		Vertex * pv = *viter;
 		v_valence(pv) = 0;
 		v_touched(pv) = false;
 	}
 
 	Vertex * head = NULL;
-	for (MeshEdgeIterator eiter(m_mesh); !eiter.end(); eiter++)
-	{
+	for (MeshEdgeIterator eiter(m_mesh); !eiter.end(); eiter++) {
 		Edge * e = *eiter;
 		e_mark(e) = 0;
 
@@ -240,27 +231,23 @@ void Graph::prune()
 		e_mark(e) = 1;
 
 		Vertex * v1 = m_mesh->edge_vertex_1(e);
-
 		head = v1;
 	}
 
-	Vertex * root = head;
+	Vertex* root = head;
 
 	std::queue<Vertex*> vqueue;
 	v_touched(head) = true;
 	vqueue.push(head);
 	v_father(head) = NULL;
 
-	while (!vqueue.empty())
-	{
+	while (!vqueue.empty()) {
 		head = vqueue.front();
 		vqueue.pop();
 
-		for (VertexEdgeIterator veiter(head); !veiter.end(); ++veiter)
-		{
+		for (VertexEdgeIterator veiter(head); !veiter.end(); ++veiter) {
 			Edge * e = *veiter;
-			if (e_mark(e) == 1)
-			{
+			if (e_mark(e) == 1) {
 				Vertex * v1 = m_mesh->edge_vertex_1(e);
 				Vertex * v2 = m_mesh->edge_vertex_2(e);
 				Vertex * tail = (v1 != head) ? v1 : v2;
@@ -273,38 +260,32 @@ void Graph::prune()
 		}
 	}
 
-
 	std::list<Edge*> ecuts;
 
-	for (MeshEdgeIterator eiter(m_mesh); !eiter.end(); eiter++)
-	{
-		Edge * e = *eiter;
-		if (e_mark(e) == 1)
-		{
+	for (MeshEdgeIterator eiter(m_mesh); !eiter.end(); eiter++) {
+		Edge* e = *eiter;
+		if (e_mark(e) == 1) {
 			ecuts.push_back(e);
 		}
 		e_sharp(e) = false;
 	}
 
-	for (std::list<Edge*>::iterator eiter = ecuts.begin(); eiter != ecuts.end(); eiter++)
-	{
-		Edge * e = *eiter;
+	for (std::list<Edge*>::iterator eiter = ecuts.begin(); eiter != ecuts.end(); eiter++) {
+		Edge* e = *eiter;
 		e_sharp(e) = true;
 
-		Vertex * v1 = m_mesh->edge_vertex_1(e);
-		Vertex * v2 = m_mesh->edge_vertex_2(e);
+		Vertex* v1 = m_mesh->edge_vertex_1(e);
+		Vertex* v2 = m_mesh->edge_vertex_2(e);
 
 		Vertex * pV = v1;
-		while (v_father(pV) != NULL)
-		{
+		while (v_father(pV) != NULL) {
 			Vertex * fv = v_father(pV);
-			Edge * e = m_mesh->vertex_edge(pV, fv);
+			Edge* e = m_mesh->vertex_edge(pV, fv);
 			e_sharp(e) = true;
 			pV = fv;
 		}
 		pV = v2;
-		while (v_father(pV) != NULL)
-		{
+		while (v_father(pV) != NULL) {
 			Vertex * fv = v_father(pV);
 			Edge * e = m_mesh->vertex_edge(pV, fv);
 			e_sharp(e) = true;
@@ -312,13 +293,11 @@ void Graph::prune()
 		}
 	}
 
-	while (true)
-	{
-		Edge * link = NULL;
+	while (true) {
+		Edge* link = NULL;
 		int valence = 0;
-		for (VertexEdgeIterator veiter(root); !veiter.end(); ++veiter)
-		{
-			Edge * e = *veiter;
+		for (VertexEdgeIterator veiter(root); !veiter.end(); ++veiter) {
+			Edge* e = *veiter;
 			if (!e_sharp(e)) continue;
 			valence++;
 			link = e;
@@ -326,8 +305,8 @@ void Graph::prune()
 		if (valence != 1) break;
 		e_sharp(link) = false;
 
-		Vertex * v1 = m_mesh->edge_vertex_1(link);
-		Vertex * v2 = m_mesh->edge_vertex_2(link);
+		Vertex* v1 = m_mesh->edge_vertex_1(link);
+		Vertex* v2 = m_mesh->edge_vertex_2(link);
 
 		root = (root != v1) ? v1 : v2;
 	}

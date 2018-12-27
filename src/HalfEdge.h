@@ -7,14 +7,12 @@
 #include "Trait.h"
 #include "Edge.h"
 
-namespace MeshLib
-{
+namespace MeshLib {
 	class Vertex;
 	class Edge;
 	class Face;
 
-	class HalfEdge
-	{
+	class HalfEdge {
 	public:
 		HalfEdge() { m_edge = NULL; m_prev = NULL; m_next = NULL; m_face = NULL; m_trait = NULL; m_vertex = NULL; m_string = ""; };
 		~HalfEdge() {};
@@ -33,11 +31,8 @@ namespace MeshLib
 		Trait *&trait() { return m_trait; };
 
 		HalfEdge *ccw_rotate_about_target();
-
 		HalfEdge *clw_rotate_about_target();
-
 		HalfEdge *ccw_rotate_about_source();
-
 		HalfEdge *clw_rotate_about_source();
 
 	private:

@@ -4,10 +4,8 @@
 #include <cassert>
 #include <cmath>
 
-namespace MeshLib 
-{
-	class Point 
-	{
+namespace MeshLib  {
+	class Point {
 	public:
 		Point(double x, double y, double z) { m_v[0] = x; m_v[1] = y; m_v[2] = z; };
 		Point() { m_v[0] = m_v[1] = m_v[2] = 0; };
@@ -52,8 +50,7 @@ namespace MeshLib
 		double m_v[3];
 	};
 
-	class Point2
-	{
+	class Point2 {
 	public:
 		Point2(double x, double y) { m_v[0] = x; m_v[1] = y; };
 		Point2(const Point2 &p) { m_v[0] = p[0]; m_v[1] = p[1]; };
@@ -87,4 +84,5 @@ namespace MeshLib
 		double m_v[2]; 
 	};
 }
+
 #endif

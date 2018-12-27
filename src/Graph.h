@@ -10,10 +10,8 @@
 #include "Iterators.h"
 #include "FormTrait.h"
 
-namespace MeshLib
-{
-	class Graph
-	{
+namespace MeshLib {
+	class Graph {
 	public:
 		Graph(Mesh *mesh);
 		~Graph();
@@ -22,7 +20,7 @@ namespace MeshLib
 		void locate_loops();
 		void propagation();
 		void prune();
-		std::list<std::list<HalfEdge*>*>  & loops() {
+		std::list<std::list<HalfEdge*>*> & loops() {
 			return m_loops;
 		};
 	protected:
@@ -36,6 +34,5 @@ namespace MeshLib
 		void trace_to_root(Vertex *leaf, std::vector<Vertex*> &path);
 	};
 }
-
 
 #endif

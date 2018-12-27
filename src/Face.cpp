@@ -5,7 +5,6 @@
 
 using namespace MeshLib;
 
-
 bool Face::include_edge(Edge *e) {
 	HalfEdge *he = m_halfedge;
 	if (he->edge() == e || he->he_next()->edge() == e || he->he_prev()->edge() == e)

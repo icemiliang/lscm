@@ -8,10 +8,8 @@
 #include "Mesh.h"
 #include "Iterators.h"
 
-namespace MeshLib
-{
-	class Loop
-	{
+namespace MeshLib {
+	class Loop {
 	public:
 		Loop(Mesh *mesh, HalfEdge *he);
 		~Loop();
@@ -26,8 +24,7 @@ namespace MeshLib
 		std::list<HalfEdge*> m_halfedges;
 	};
 
-	class Boundary
-	{
+	class Boundary {
 	public:
 		Boundary(Mesh *mesh);
 		~Boundary();
@@ -38,4 +35,5 @@ namespace MeshLib
 		std::list<Loop*> m_loops;
 	};
 }
+
 #endif

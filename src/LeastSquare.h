@@ -1,7 +1,6 @@
 #ifndef _LEASTSQUARE_H_
 #define _LEASTSQUARE_H_
 
-
 #include <vector>
 #include <list>
 
@@ -9,11 +8,8 @@
 #include "Iterators.h"
 #include "FormTrait.h"
 
-
-namespace MeshLib
-{
-class LeastSquare
-{
+namespace MeshLib {
+class LeastSquare {
 public:
 	LeastSquare(Mesh *mesh);
 	~LeastSquare();
@@ -27,4 +23,5 @@ protected:
 	void compute_vertex_valence();
 };
 }
+
 #endif

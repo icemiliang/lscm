@@ -1,28 +1,18 @@
-//FException
-
 #ifndef _FEXCEPTION_H_
 #define _FEXCEPTION_H_
 
+namespace MeshLib {
 
-namespace MeshLib
-{
-
-class FException 
-{
+class FException  {
  public:
 	 FException();
 	 FException(char * strg);
-
 	 ~FException();
-
 	 void what();
-    
+
 private:
- 
 	const char * msg;
 };
+}
 
-
-}//end of namespace MeshLib
-#endif //FException
-
+#endif

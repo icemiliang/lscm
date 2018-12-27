@@ -11,8 +11,7 @@ Homology::Homology(Mesh *mesh) {
 Homology::~Homology() {
 	delete m_graph;
 
-	for (std::list<std::list<HalfEdge*>*>::iterator liter = m_loops.begin(); liter != m_loops.end(); liter++)
-	{
+	for (std::list<std::list<HalfEdge*>*>::iterator liter = m_loops.begin(); liter != m_loops.end(); liter++) {
 		std::list<HalfEdge*>* l = *liter;
 		delete l;
 	}
@@ -41,7 +40,6 @@ void Homology::compute_basis() {
 }
 
 void Homology::output(const char *prefix){
-
 	int id = 1;
 	for (std::list<std::list<HalfEdge*>*>::iterator llh = m_loops.begin(); llh != m_loops.end(); llh++) {
 		std::list<HalfEdge*>* l = *llh;

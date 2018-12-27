@@ -6,12 +6,10 @@
 #include <string>
 #include "Trait.h"
 
-namespace MeshLib
-{
+namespace MeshLib {
 	class HalfEdge;
 	class Vertex;
-	class Edge
-	{
+	class Edge {
 	public:
 		Edge() { m_halfedge[0] = NULL; m_halfedge[1] = NULL; m_trait = NULL; m_string = ""; };
 		~Edge() {};
@@ -28,8 +26,7 @@ namespace MeshLib
 		std::string m_string;
 	};
 
-	class EdgeKey
-	{
+	class EdgeKey {
 	public:
 		~EdgeKey() {};
 		EdgeKey(Vertex *v1, Vertex *v2);
@@ -40,4 +37,5 @@ namespace MeshLib
 		Vertex *m_vertices[2];
 	};
 }
+
 #endif

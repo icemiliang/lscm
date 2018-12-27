@@ -1,5 +1,3 @@
-//FException
-
 #include <iostream>
 #include "FException.h"
 
@@ -11,20 +9,15 @@ static char THIS_FILE[]=__FILE__;
 
 using namespace MeshLib;
 
-FException::FException()
-{
+FException::FException() {
 	msg = "failed to open file";
 }
-FException::FException(char *strg)
-{
+FException::FException(char *strg) {
 	msg = strg;
 }
 
 FException::~FException(){}
 
-
-void
-FException::what()
-{
+void FException::what() {
 	std::cout << msg << std::endl;
 }

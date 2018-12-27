@@ -35,8 +35,7 @@ HalfEdge *Vertex::most_ccw_out_halfedge() {
 	HalfEdge * he = m_halfedge->he_next();
 	HalfEdge * ne = he->ccw_rotate_about_source();
 
-	while (ne != NULL)
-	{
+	while (ne != NULL) {
 		he = ne;
 		ne = he->ccw_rotate_about_source();
 	}

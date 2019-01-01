@@ -2,11 +2,11 @@
 #
 # Author   : Mi, Liang
 # Email    : icemiliang@gmail.com
-# Date     : Dec 26th 2018
+# Date     : Nov 28th 2018
 
 include ../config.mk
 
-objs = Boundary.o LeastSquare.o Edge.o Face.o FormTrait.o HalfEdge.o\
+objs = Boundary.o lscm.o Edge.o Face.o FormTrait.o HalfEdge.o\
        Homology.o Mesh.o Vertex.o Graph.o
 src=$(patsubst %.o,%.cpp,$(objs))
 

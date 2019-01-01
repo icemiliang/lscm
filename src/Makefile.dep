@@ -1,5 +1,5 @@
 Boundary.o: Boundary.cpp Boundary.h
-LeastSquare.o: LeastSquare.cpp LeastSquare.h
+lscm.o: lscm.cpp lscm.h
 Edge.o: Edge.cpp Edge.h HalfEdge.h Vertex.h Face.h
 Face.o: Face.cpp Face.h HalfEdge.h
 FormTrait.o: FormTrait.cpp FormTrait.h

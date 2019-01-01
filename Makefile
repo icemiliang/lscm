@@ -2,21 +2,18 @@
 #
 # Author   : Mi, Liang 
 # Email    : icemiliang@gmail.com
-# Date     : Nov 27th 2018
-
-# Tell make that these are phony targets
-.PHONY: all clean
+# Date     : Dec 31th 2018
 
 include config.mk
 
-all: objs lscm
+all: objs main
 
 objs:
 	$(MAKE) -C src
 
-lscm: lscm.cpp
-	$(CXX) $(CFLAGS) $(E_INC) $(E_LIB) -o lscm lscm.cpp -lmesh++
+main: main.cpp
+	$(CXX) $(CFLAGS) $(E_INC) $(E_LIB) -o main main.cpp -lmesh++
 
 clean:
 	$(MAKE) -C src clean
-	rm -f lscm
+	rm -f main

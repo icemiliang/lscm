@@ -7,7 +7,7 @@
 #include <cmath>
 #include "Mesh.h"
 #include "FormTrait.h"
-#include "LeastSquare.h"
+#include "lscm.h"
 #include <iostream>
 
 using namespace MeshLib;
@@ -20,12 +20,12 @@ int main(int argc, char * argv[]) {
 	FormTrait traits(&mesh);
 
 	std::cout << "--> Computing conformal map..." << std::endl;
-	LeastSquare lscm(&mesh);
+	LSCM lscm(&mesh);
 	lscm.parameterize();
 
 	std::cout << "--> Writing mesh..." << std::endl;
 	mesh.write_obj(argv[2]);
-	if (argc>3)
+	if (argc > 3)
 		mesh.write_ply(argv[3]);
 	return 0;
 }

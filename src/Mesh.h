@@ -33,9 +33,6 @@ namespace MeshLib {
 		int copy(Mesh &mesh);
 		int read_obj(const char *input);
 		int write_obj(const char *output);
-		int write_ply(const char *output);
-		int read_m(const char *input);
-		int write_m(const char *output);
 
 		int numVertices();
 		int numEdges();

@@ -1,9 +1,10 @@
-#include "lscm.h"
+#include "LSCM.h"
 #include <assert.h>
 #include <math.h>
 #include <float.h>
 #include <Eigen/Sparse>
 #include <iostream>
+#include <sstream>
 #include <Eigen/IterativeLinearSolvers>
 
 using namespace MeshLib;
@@ -54,16 +55,20 @@ void LSCM::set_coefficients() {
 	}
 }
 
-void LSCM::parameterize() {
+void LSCM::project() {
 	set_coefficients();
 
 	std::vector<Vertex*> vertices;
-	std::vector<Face*>   faces;
+    std::vector<Face*> faces;
 
 	for (MeshVertexIterator viter(m_mesh); !viter.end(); ++viter){
 		Vertex * v = *viter;
-		if (v->string() != "fix") vertices.push_back(v);
-		else m_fix_vertices.push_back(v);
+		if (v->string().substr(0,3) != "fix") {
+			vertices.push_back(v);
+		}
+		else {
+			m_fix_vertices.push_back(v);
+		}
 	}
 	assert(m_fix_vertices.size()>=2);
 
@@ -72,12 +77,12 @@ void LSCM::parameterize() {
 	}
 	for (int k = 0; k < (int)m_fix_vertices.size(); k++) {
 		v_idx(m_fix_vertices[k]) = k;
+		Vertex *v = m_fix_vertices[k];
+		std::string tmp;
+		double uv0, uv1;
+		std::stringstream(v->string()) >> tmp >> uv0 >> uv1;
+		v_uv(v) = Point2(uv0, uv1);
 	}
-
-	Vertex * v0 = m_fix_vertices[0];
-	Vertex * v1 = m_fix_vertices[1];
-	v_uv(v0) = Point2(0, 0);
-	v_uv(v1) = Point2(0, 0.8);
 
 	int fn = m_mesh->numFaces();
 	int	vfn = m_fix_vertices.size();
@@ -101,7 +106,7 @@ void LSCM::parameterize() {
 			Vertex * v = he->he_next()->target();
 			int vid = v_idx(v);
 
-			if (v->string() != "fix") {
+			if (v->string().substr(0,3) != "fix") {
 				tripletList1.push_back(T(fid,vid,s[0]));
 				tripletList1.push_back(T(fn + fid, vn + vid, s[0]));
 				tripletList1.push_back(T(fid, vn + vid, -s[1]));
@@ -131,7 +136,7 @@ void LSCM::parameterize() {
 	r = B * b;
 	r = r * -1;
 
-	// Solve the linear system of Ax = r
+    // Solve the linear system Ax = r
 	Eigen::LeastSquaresConjugateGradient<Eigen::SparseMatrix<double>> lscg;
 	lscg.compute(A);
 	x = lscg.solve(r);

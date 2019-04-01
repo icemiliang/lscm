@@ -7,7 +7,7 @@
 #include <cmath>
 #include "Mesh.h"
 #include "FormTrait.h"
-#include "lscm.h"
+#include "LSCM.h"
 #include <iostream>
 
 using namespace MeshLib;
@@ -21,11 +21,9 @@ int main(int argc, char * argv[]) {
 
 	std::cout << "--> Computing conformal map..." << std::endl;
 	LSCM lscm(&mesh);
-	lscm.parameterize();
+    lscm.project();
 
 	std::cout << "--> Writing mesh..." << std::endl;
 	mesh.write_obj(argv[2]);
-	if (argc > 3)
-		mesh.write_ply(argv[3]);
 	return 0;
 }

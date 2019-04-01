@@ -16,7 +16,7 @@ public:
 	LSCM(Mesh *mesh);
 	~LSCM();
 
-	void parameterize();
+    void project();
 protected:
 	Mesh *m_mesh;
 	std::vector<Vertex*> m_fix_vertices;

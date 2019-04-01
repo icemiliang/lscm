@@ -5,24 +5,36 @@ This package includes the prototype code for implementing least squares conforma
 
 ![alt text](data/human.jpg?raw=true "Least squares conformal mapping")
 
+Note: There were a few questions about texture mapping using LSCM. I honestly don't have experience with texture mapping, but I think Lévy's paper (referenced below) provides a pretty clear (automatic) pipeline to do that:
+1. Segment the mesh into smaller pieces
+2. Map every piece onto the same uv plane (by giving each piece different fixed uv points)
+3. Arranage the meshes on the plane to avoid overlap and make them fit into a rectangular as tight as possible
+4. Apply texture on the uv plane 
+5. Use the correspondence between the 2D and 3D positions of each vertex to apply the texture to the original mesh
+
+This pipeline should work on either meshes with boundaries or water-tight meshes. I am not sure about non-genus zero meshes.
+
 ## Build
 
 [![Build status](https://ci.appveyor.com/api/projects/status/mxjqk9rqgiaec40d?svg=true)](https://ci.appveyor.com/project/icemiliang/lscm)
 
 In the root directory, run:
 ```
-$ make clean && make
+$ rm -r build
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
 ```
 
-The program has been tested on Ubuntu 16.04 with g++ 5.5.0. It requires Eigen 3 for solving linear systems, which was included, but if you want to use you own Eigen library, update the path in [config.mk](config.mk).
+The program has been tested on Ubuntu 16.04 with g++ 5.4.0. It requires Eigen 3 for solving linear systems, which was included, but if you want to use you own Eigen library, please modify [CMakeLists.txt](CMakeLists.txt).
 
 ## Usage
 ```
-./lscm input.obj output.obj [output.ply]
+./main ../data/human.obj output.obj
 ```
-The last argument is an additional output in the ply format. MeshLab cannot load vertex normal from obj but can from ply, at least on my computer (Ubuntu 16.04 + MeshLab v1.3.2_64bit). You can ask for a ply output if needed.
 
-LSCM requires two fixed vertices. Search in human.obj for "fix" and you will find two such fixed vertices having an additional trait "fix" after xyz coordinates. In human.obj, these two vertices are somewhere at the two eyes. These two vertices will be mapped to hard-coded positions -- (0,0) and (0,0.8). You can specify your own fixed vertices in the same way. Check out [LSCM::parameterize](src/lscm.cpp) to change the cooresponding uv coordinates.
+LSCM requires at least two fixed vertices. Search in human.obj for "fix" and you will find two such fixed vertices having an additional trait "fix u v" after the xyz coordinates. In human.obj, these two vertices are somewhere at the two eyes. These two vertices will be mapped to (u,v). You can specify your own fixed vertices in the same way. 
 
 ## References
 Gu, Xianfeng David. Computational conformal geometry. Edited by Shing-Tung Yau. Somerville, Mass, USA: International Press, 2008.

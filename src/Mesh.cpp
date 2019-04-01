@@ -165,8 +165,7 @@ Mesh::~Mesh() {
 	m_faces.clear();
 
 	//remove edges
-	for (std::list<Edge*>::iterator eiter = m_edges.begin(); eiter != m_edges.end(); eiter++)
-	{
+	for (std::list<Edge*>::iterator eiter = m_edges.begin(); eiter != m_edges.end(); eiter++) {
 		Edge * pE = *eiter;
 		delete pE;
 	}
@@ -216,8 +215,7 @@ int Mesh::read_obj(const char * filename) {
 
 		if (strcmp(token, "v") == 0) {
 			Point p;
-			for (int i = 0; i < 3; i++)
-			{
+			for (int i = 0; i < 3; i++) {
 				token = strtok(NULL, seps);
 				p[i] = atof(token);
 			}
@@ -227,28 +225,19 @@ int Mesh::read_obj(const char * filename) {
 			v->id() = vid++;
 
 			// Add feature points
-			token = strtok(NULL, seps);
-			if (token != NULL) {
-				v->string() = "fix";
-			}
+            token = strtok(NULL, "\n");
+            if (token == NULL) continue;
+
+            std::string s(token);
+            if (s.substr(0,3) == "fix") {
+                v->string() = s;
+            }
 			continue;
 		}
 
-		// if (strcmp(token, "vt") == 0)
-		// {
-		// 	Point p;
-		// 	for (int i = 0; i < 2; i++)
-		// 	{
-		// 		token = strtok(NULL, seps);
-		// 		p[i] = atof(token);
-		// 	}
-		// 	continue;
-		// }
-
 		if (strcmp(token, "vn") == 0) {
 			Point p;
-			for (int i = 0; i < 3; i++)
-			{
+			for (int i = 0; i < 3; i++) {
 				token = strtok(NULL, seps);
 				p[i] = atof(token);
 
@@ -325,8 +314,7 @@ int Mesh::read_obj(const char * filename) {
 		if (!v->boundary()) continue;
 
 		HalfEdge * he = v->halfedge();
-		while (he->he_sym() != NULL)
-		{
+		while (he->he_sym() != NULL) {
 			he = he->ccw_rotate_about_target();
 		}
 
@@ -439,239 +427,6 @@ HalfEdge *Mesh::vertex_halfedge(Vertex *v0, Vertex *v1) {
 	return he;
 }
 
-int Mesh::read_m(const char * input) {
-	FILE * is = fopen(input, "r");
-	if (is == NULL) {
-		fprintf(stderr, "Error is opening file %s\n", input);
-		return 0;
-	}
-
-	char line[MAX_LINE];
-	int id;
-
-	while (!feof(is)) {
-		if (fgets(line, MAX_LINE, is) == NULL) break;
-		if (strlen(line)< 4) break;
-
-		char * str = strtok(line, " \r\n");
-		if (strcmp(str, "Vertex") == 0) {
-			str = strtok(NULL, " \r\n");
-			id = atoi(str);
-			Point p;
-			for (int i = 0; i < 3; i++) {
-				str = strtok(NULL, " \r\n");
-				p[i] = atof(str);
-			}
-
-			Vertex *v = create_vertex(id);
-			v->point() = p;
-			v->id() = id;
-
-			str = strtok(NULL, "\r\n");
-			if (str == NULL) continue;
-
-			std::string s(str);
-			int sp = (int)s.find("{");
-			int ep = (int)s.find("}");
-
-			if (sp >= 0 && ep >= 0)
-			{
-				v->string() = s.substr(sp + 1, ep - sp - 1);
-			}
-			continue;
-		}
-
-		if (strcmp(str, "Face") == 0) {
-			str = strtok(NULL, " \r\n");
-			id = atoi(str);
-
-			Vertex * v[3];
-			for (int i = 0; i < 3; i++) {
-				str = strtok(NULL, " \r\n");
-				v[i] = id_vertex(atoi(str));
-			}
-
-			Face *f = create_face(v, id);
-
-			str = strtok(NULL, "\r\n");
-			if (str == NULL)       continue;
-
-			std::string s(str);
-
-			int sp = (int)s.find("{");
-			int ep = (int)s.find("}");
-
-			if (sp >= 0 && ep >= 0) {
-				f->string() = s.substr(sp + 1, ep - sp - 1);
-			}
-			continue;
-		}
-
-		//read in edge attributes
-		if (strcmp(str, "Edge") == 0) {
-			str = strtok(NULL, " \r\n");
-			int id0 = atoi(str);
-
-			str = strtok(NULL, " \r\n");
-			int id1 = atoi(str);
-
-			Vertex * v0 = id_vertex(id0);
-			Vertex * v1 = id_vertex(id1);
-
-			Edge *edge = vertex_edge(v0, v1);
-
-			str = strtok(NULL, "\r\n");
-
-			std::string s(str);
-			int sp = (int)s.find("{");
-			int ep = (int)s.find("}");
-
-			if (sp >= 0 && ep >= 0) {
-				edge->string() = s.substr(sp + 1, ep - sp - 1);
-			}
-			continue;
-		}
-
-		//read in edge attributes
-		if (strcmp(str, "Corner") == 0) {
-			str = strtok(NULL, " \r\n");
-			int id0 = atoi(str);
-
-			str = strtok(NULL, " \r\n");
-			int id1 = atoi(str);
-
-
-			Vertex * v = id_vertex(id0);
-			Face   * f = id_face(id1);
-			HalfEdge *he = corner(v, f);
-
-			str = strtok(NULL, "\r\n");
-			std::string s(str);
-
-			int sp = (int)s.find("{");
-			int ep = (int)s.find("}");
-
-			if (sp >= 0 && ep >= 0) {
-				he->string() = s.substr(sp + 1, ep - sp - 1);
-			}
-			continue;
-		}
-	}
-
-	//Label boundary edges
-	for (std::list<Edge*>::iterator eiter = m_edges.begin(); eiter != m_edges.end(); ++eiter) {
-		Edge     *edge = *eiter;
-		HalfEdge *he[2];
-
-		he[0] = edge->halfedge(0);
-		he[1] = edge->halfedge(1);
-
-		assert(he[0] != NULL);
-
-		if (he[1] != NULL) {
-			assert(he[0]->target() == he[1]->source() && he[0]->source() == he[1]->target());
-
-			if (he[0]->target()->id() < he[0]->source()->id()) {
-				edge->halfedge(0) = he[1];
-				edge->halfedge(1) = he[0];
-			}
-
-			assert(edge_vertex_1(edge)->id() < edge_vertex_2(edge)->id());
-		}
-		else {
-			he[0]->vertex()->boundary() = true;
-			he[0]->he_prev()->vertex()->boundary() = true;
-		}
-	}
-
-	std::list<Vertex*> dangling_verts;
-	//Label boundary edges
-	for (std::list<Vertex*>::iterator viter = m_vertices.begin(); viter != m_vertices.end(); ++viter) {
-		Vertex     *v = *viter;
-		if (v->halfedge() != NULL) continue;
-		dangling_verts.push_back(v);
-	}
-
-	for (std::list<Vertex*>::iterator viter = dangling_verts.begin(); viter != dangling_verts.end(); ++viter) {
-		Vertex *v = *viter;
-		m_vertices.remove(v);
-		delete v;
-		v = NULL;
-	}
-
-	//Arrange the boundary half_edge of boundary vertices, to make its halfedge
-	//to be the most ccw in half_edge
-	for (std::list<Vertex*>::iterator viter = m_vertices.begin(); viter != m_vertices.end(); ++viter) {
-		Vertex     *v = *viter;
-		if (!v->boundary()) continue;
-
-		HalfEdge * he = v->halfedge();
-		while (he->he_sym() != NULL) {
-			he = he->ccw_rotate_about_target();
-		}
-		v->halfedge() = he;
-	}
-
-	return 0;
-}
-
-int Mesh::write_m(const char * output) {
-	FILE * _os = fopen(output, "w");
-	assert(_os);
-
-	//remove vertices
-	for (std::list<Vertex*>::iterator viter = m_vertices.begin(); viter != m_vertices.end(); viter++) {
-		Vertex *v = *viter;
-
-		fprintf(_os, "Vertex %d ", v->id());
-
-		for (int i = 0; i < 3; i++) {
-			fprintf(_os, "%g ", v->point()[i]);
-		}
-		if (v->string().size() > 0) {
-			fprintf(_os, "{%s}", v->string().c_str());
-		}
-		fprintf(_os, "\n");
-	}
-
-	for (std::list<Face*>::iterator fiter = m_faces.begin(); fiter != m_faces.end(); fiter++) {
-		Face *f = *fiter;
-		fprintf(_os, "Face %d", f->id());
-
-		HalfEdge *he = f->halfedge();
-		do {
-			fprintf(_os, " %d", he->target()->id());
-			he = he->he_next();
-		} while (he != f->halfedge());
-
-		if (f->string().size() > 0) {
-			fprintf(_os, "{%s}", f->string().c_str());
-		}
-
-		fprintf(_os, "\n");
-	}
-
-	for (std::list<Edge*>::iterator eiter = m_edges.begin(); eiter != m_edges.end(); eiter++) {
-		Edge *e = *eiter;
-		if (e->string().size() > 0) {
-			fprintf(_os, "Edge %d %d {%s} \n", edge_vertex_1(e)->id(), edge_vertex_2(e)->id(), e->string().c_str());
-		}
-	}
-
-	for (std::list<Face*>::iterator fiter = m_faces.begin(); fiter != m_faces.end(); fiter++) {
-		Face *f = *fiter;
-		HalfEdge *he = f->halfedge();
-		do {
-			if (he->string().size() > 0) {
-				fprintf(_os, "Corner %d %d {%s}\n", he->vertex()->id(), f->id(), he->string().c_str());
-			}
-			he = he->he_next();
-		} while (he != f->halfedge());
-	}
-
-	fclose(_os);
-	return 0;
-}
 
 int Mesh::write_obj(const char * output) {
 	FILE * _os = fopen(output, "w");
@@ -715,43 +470,3 @@ int Mesh::write_obj(const char * output) {
 	return 0;
 }
 
-int Mesh::write_ply(const char * output) {
-	FILE * _os = fopen(output, "w");
-	assert(_os);
-
-	fprintf(_os, "ply\nformat ascii 1.0\n");
-	fprintf(_os, "element vertex %d\n", (int)m_vertices.size());
-	fprintf(_os, "property float x\nproperty float y\nproperty float z\n");
-	fprintf(_os, "property float nx\nproperty float ny\nproperty float nz\n");
-	fprintf(_os, "element face %d\n", (int)m_faces.size());
-	fprintf(_os, "property list uchar int vertex_indices\nend_header\n");
-
-	//remove vertices
-	for (std::list<Vertex*>::iterator viter = m_vertices.begin(); viter != m_vertices.end(); viter++) {
-		Vertex *v = *viter;
-
-		for (int i = 0; i < 3; i++) {
-			fprintf(_os, " %g", v->point()[i]);
-		}
-		for (int i = 0; i < 3; i++) {
-			fprintf(_os, " %g", v->normal()[i]);
-		}
-		fprintf(_os, "\n");
-	}
-
-	for (std::list<Face*>::iterator fiter = m_faces.begin(); fiter != m_faces.end(); fiter++) {
-		Face *f = *fiter;
-		fprintf(_os, "3");
-
-		HalfEdge *he = f->halfedge();
-		do{
-			fprintf(_os, " %d", he->target()->id()-1);
-			he = he->he_next();
-		} while (he != f->halfedge());
-
-		fprintf(_os, "\n");
-	}
-
-	fclose(_os);
-	return 0;
-}

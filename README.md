@@ -5,15 +5,6 @@ This package includes the prototype code for implementing least squares conforma
 
 ![alt text](data/human.jpg?raw=true "Least squares conformal mapping")
 
-Note: There were a few questions about texture mapping using LSCM. I honestly don't have experience with texture mapping, but I think Lévy's paper (referenced below) provides a pretty clear (automatic) pipeline to do that:
-1. Segment the mesh into smaller pieces
-2. Map every piece onto the same uv plane (by giving each piece different fixed uv points)
-3. Arranage the meshes on the plane to avoid overlap and make them fit into a rectangular as tight as possible
-4. Apply texture on the uv plane 
-5. Use the correspondence between the 2D and 3D positions of each vertex to apply the texture to the original mesh
-
-This pipeline should work on either meshes with boundaries or water-tight meshes. I am not sure about non-genus zero meshes.
-
 ## Build
 
 [![Build status](https://ci.appveyor.com/api/projects/status/mxjqk9rqgiaec40d?svg=true)](https://ci.appveyor.com/project/icemiliang/lscm)
@@ -43,3 +34,13 @@ Lévy, Bruno, Sylvain Petitjean, Nicolas Ray, and Jérome Maillot. "Least square
 
 ## Contact
 Please contact Liang Mi icemiliang@gmail.com for any issues. 
+
+Note: There were a few questions about texture mapping using LSCM. I honestly don't have experience with texture mapping, but I think Lévy's paper (referenced above) introduces a pipeline to do that. Below is what I understand.
+
+1. Segment the mesh into smaller pieces
+2. Map every piece onto the same uv plane (by giving each piece different fixed uv points)
+3. Arranage the flattened meshes on the plane to avoid overlap and make them fit into a rectangular as tight as possible
+4. Apply texture on the uv plane 
+5. Use the correspondence between the 2D and 3D positions of each vertex to apply the texture to the original mesh
+
+LSCM only serves step 2. This pipeline should work on either meshes with boundaries or water-tight meshes. However, non-genus zero meshes could be a problem.

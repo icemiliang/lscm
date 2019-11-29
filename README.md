@@ -33,7 +33,7 @@ Gu, Xianfeng David. Computational conformal geometry. Edited by Shing-Tung Yau. 
 Lévy, Bruno, Sylvain Petitjean, Nicolas Ray, and Jérome Maillot. "Least squares conformal maps for automatic texture atlas generation." In ACM transactions on graphics (TOG), vol. 21, no. 3, pp. 362-371. ACM, 2002.
 
 ## Contact
-Please contact Liang Mi icemiliang@gmail.com for any issues. 
+Please contact Liang Mi icemiliang@gmail.com for any issues. Pull requests are welcome.
 
 Note: There were a few questions about texture mapping using LSCM. I honestly don't have experience with texture mapping, but I think Lévy's paper (referenced above) introduces a pipeline to do that. Below is what I understand.
 

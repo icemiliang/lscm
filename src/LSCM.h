@@ -13,15 +13,15 @@ namespace MeshLib {
 
 class LSCM {
 public:
-	LSCM(Mesh *mesh);
-	~LSCM();
+    LSCM(Mesh *mesh);
+    ~LSCM();
 
     void project();
 protected:
-	Mesh *m_mesh;
-	std::vector<Vertex*> m_fix_vertices;
+    Mesh *m_mesh;
+    std::vector<Vertex*> m_fix_vertices;
 
-	void set_coefficients();
+    void set_coefficients();
 };
 
 }

@@ -9,7 +9,6 @@ FormTrait::FormTrait(Mesh * mesh) {
 	allocate_edge_trait();
 	allocate_halfedge_trait();
 	allocate_face_trait();
-
 }
 
 FormTrait::~FormTrait() {

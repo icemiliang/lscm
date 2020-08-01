@@ -46,6 +46,8 @@ namespace MeshLib  {
 		double x(){ return m_v[0]; };
 		double y(){ return m_v[1]; };
 		double z(){ return m_v[2]; };
+
+        Point rotate(double theta, Point vector);
 	private:
 		double m_v[3];
 	};

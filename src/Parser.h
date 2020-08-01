@@ -2,7 +2,6 @@
 #define _MESHLIB_PARSER_H_
 
 #include <string>
-#include "SList.h"
 
 namespace MeshLib {
 class Token {

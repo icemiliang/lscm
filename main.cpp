@@ -1,8 +1,9 @@
 // Least squares conformal mapping
 //
-// Author   : Mi, Liang (Arizona State University)
+// Author   : Mi, Liang
 // Email    : icemiliang@gmail.com
-// Date     : June 13th 2018
+// Date     : July 31st 2020
+// License  : MIT
 
 #include <cmath>
 #include "Mesh.h"

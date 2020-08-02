@@ -8,6 +8,7 @@ This package includes the prototype code for implementing least squares conforma
 ## Build
 
 [![Build status](https://ci.appveyor.com/api/projects/status/mxjqk9rqgiaec40d?svg=true)](https://ci.appveyor.com/project/icemiliang/lscm)
+[![Build Status](https://travis-ci.com/icemiliang/lscm.svg?branch=master)](https://travis-ci.com/icemiliang/lscm)
 
 In the root directory, run:
 ```
@@ -18,7 +19,7 @@ $ cmake ..
 $ make
 ```
 
-The program has been tested on Ubuntu 16.04 with g++ 5.4.0. It requires Eigen 3 for solving linear systems, which was included, but if you want to use you own Eigen library, please modify [CMakeLists.txt](CMakeLists.txt).
+The program has been tested on Ubuntu 18.04 with g++ 5.5.0. It requires Eigen 3 for solving linear systems, which was included, but if you want to use you own Eigen library, please modify [CMakeLists.txt](CMakeLists.txt).
 
 ## Usage
 ```
